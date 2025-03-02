@@ -20,14 +20,14 @@ substring = 'add it to the END OF this Paragraph.' # Save a part o text after wh
 index = my_text.index(substring) + len(substring) # Find the place where we insert a new sentence as sum of the start of substring and length of this substring
 
 str_parts = [] # Divide the string into sentences. Save every sentence in this list
-for i in re.findall('[^\.]*?[\.!\?]\s*', my_text): # Patern: Start - any number of symbols except "." End - one of the symbol ".", "!" or "?" and any white spaces
+for i in re.findall(r'[^\.]*?[\.!\?]\s*', my_text): # Patern: Start - any number of symbols except "." End - one of the symbol ".", "!" or "?" and any white spaces
     str_parts.append(i.capitalize()) # Make the first letter in capital case and others - small letters
 
 new_str = ''.join(str_parts) # Join formated parts to one string
 
 last_words = [] # Create a list to store last words of the sentences
-for i in re.findall('[^\.\s]*?[\.!\?]\s*', my_text): # Patern: Start - any number of symbols except "." and white spaces. End - one of the symbol ".", "!" or "?" and any white spaces
-    i = i.strip().lower().strip('.') # Delete white spaces around the word -> Make all symbols in small case -> Delete "." fronm the begining and end of the word
+for i in re.findall(r'[^\.\s]*?[\.!\?]\s*', my_text): # Patern: Start - any number of symbols except "." and white spaces. End - one of the symbol ".", "!" or "?" and any white spaces
+    i = i.strip().lower().strip(r'[.!?]') # Delete white spaces around the word -> Make all symbols in small case -> Delete ".", "!" and "?" from the begining and end of the word
     if i: # Gather all words except empty space ''
         last_words.append(i)
 
