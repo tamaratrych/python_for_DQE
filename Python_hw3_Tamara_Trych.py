@@ -42,6 +42,6 @@ print(new_str)
 
 space_num = 0
 for i in new_str: # Go through every symbol and if it's a white space increment space_num
-    space_num = space_num + 1 if re.search('\s', i) else space_num
+    space_num = space_num + 1 if re.search(r'\s', i) else space_num
 
 print('\nNumber of whitespace characters in this text -', space_num)

@@ -59,6 +59,7 @@ def generate_sentence_from_last_words(any_string):
 
     new_sentence = ' '.join(last_words).capitalize() # Join all last words through white space -> Make the first letter in capital case
     new_sentence = ''.join([new_sentence, '.']) # Add symbol '.' at the end of the generated sentence
+    new_sentence = ''.join([' ', new_sentence])  # Add symbol ' ' at the start of the generated sentence
 
     return new_sentence
 
@@ -79,12 +80,12 @@ def fix_mistakes(any_string):
 def count_spaces(any_string):
     space_num = 0
     for i in any_string: # Go through every symbol and if it's a white space increment space_num
-        space_num = space_num + 1 if re.search('\s', i) else space_num
+        space_num = space_num + 1 if re.search(r'\s', i) else space_num
 
     return space_num
 
 
-def normalize_text(any_string, any_substring):
+def modificate_text(any_string, any_substring):
     new_sentence = generate_sentence_from_last_words(any_string)
     new_str = add_str_into_text(any_string, any_substring, new_sentence) # Add the new sentence to our string
     first_capital_letter = capitalize_text(new_str)
@@ -115,11 +116,10 @@ my_text = """homEwork:
 
 
 
-  last iz TO calculate nuMber OF Whitespace characteRS in this Tex! caREFULL, not only Spaces, but ALL whitespaces. I got 87.
-"""
+  last iz TO calculate nuMber OF Whitespace characteRS in this Tex! caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
 
 phrase_for_index = 'add it to the END OF this Paragraph.'
-my_normalized_text = normalize_text(my_text, phrase_for_index)
+my_normalized_text = modificate_text(my_text, phrase_for_index)
 print(my_normalized_text)
 
 space_num = count_spaces(my_normalized_text)
