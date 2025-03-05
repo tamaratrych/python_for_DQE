@@ -33,19 +33,29 @@ def choose_max_dict_value(any_dict):
 
     return result_dict
 
+def count_values(any_dict, one_dict):
+    all_keys_set = set(one_dict.keys())
+    num_values_dict = dict.fromkeys(all_keys_set, 0)
+    for i in any_dict:
+        for j in i.keys():
+            num_values_dict[j] += 1
+
+    return num_values_dict
+
 def combine_dicts_leave_max_value_for_same_key(any_dict_list):
     dict_with_all_values = fill_dict_with_values_from_another_dicts(any_dict_list)
     result_dict = choose_max_dict_value(dict_with_all_values)
+    num_values_dict = count_values(any_dict_list, dict_with_all_values)
 
     x = 1  # Enter a variable that indicates the ordinal number of the dictionary in the list
     for i in any_dict_list:  # Go through each dictionary
         for j in i.keys():
-            if dict_with_all_values[j] != 1:  # If such a key occurs in more than one dictionary, then
+            if num_values_dict[j] != 1:  # If such a key occurs in more than one dictionary, then
                 if result_dict[j] == i[j]:  # Check if the maximum value is stored in this dictionary, if so, then
                     del result_dict[j]  # Delete a record with this key from the resulting dictionary
                     new_key = str(j) + '_' + str(x)  # Generate a new key
                     result_dict[new_key] = i[j]  # Add new generated key with value to the resulting dictionary
-                    dict_with_all_values[j] = 1  # Since a dictionary has been found that stores the maximum value, in order not to process this value anymore (even if there is the same value in another dictionary under this key), then it is forced to specify that there is one value with this key
+                    num_values_dict[j] = 1  # Since a dictionary has been found that stores the maximum value, in order not to process this value anymore (even if there is the same value in another dictionary under this key), then it is forced to specify that there is one value with this key
         x += 1  # Increase the dictionary counter by one
 
     return result_dict
