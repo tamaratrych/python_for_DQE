@@ -1,21 +1,16 @@
 """
-Create a tool, which will do user generated news feed:
-1.User select what data type he wants to add
-2.Provide record type required data
-3.Record is published on text file in special format
-
-
-
-You need to implement:
-1.News – text and city as input. Date is calculated during publishing.
-2.Privat ad – text and expiration date as input. Day left is calculated during publishing.
-3.Your unique one with unique publish rules.
-
-
-
-Each new record should be added to the end of file. Commit file in git for review.
+Expand previous Homework 5 with additional class, which allow to provide records by text file:
+1.Define your input format (one or many records)
+2.Default folder or user provided file path
+3.Remove file if it was successfully processed
+4.Apply case normalization functionality from Homework 3/4
 """
+import os
+import sys
 from datetime import datetime, date
+from Python_hw4_Tamara_Trych import capitalize_text
+
+DEFAULT_FILE = 'my_file.txt'
 
 class Publication:
     def __init__(self, pulication_text):
@@ -104,11 +99,51 @@ class RentOfDay(Publication):
         return cls(address, price, square)
 
 
+class DataFromFile():
+    def parse_txt(self):
+        txt_for_publish = ''
+        try:
+            with open(self.txt, "r", encoding="utf-8") as f:
+                txt_for_publish = f.read()
+            txt_for_publish = capitalize_text(txt_for_publish)
+            return txt_for_publish
+        except FileNotFoundError:
+            print(f"Error: File '{self.txt}' not found.")
+            return None
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
+    def __init__(self, txt=None):
+        if txt is None:
+            self.txt = os.path.join(os.path.dirname(__file__), DEFAULT_FILE) # File by default
+        else:
+            self.txt = txt
+        self.txt_for_publish = self.parse_txt()
+
+    def publish(self):
+        if self.txt_for_publish:
+            with open("publication.txt", "a", encoding="utf-8") as f:
+                f.write(self.txt_for_publish)
+        else:
+            print("No data to publish.")
+
+
 class Writer:
-    def __init__(self):
+    def __init__(self, txt=None):
+        if len(sys.argv) > 1:
+            self.mode = 'file'
+            self.txt = sys.argv[1]
+        else:
+            self.mode = input('Choose a mode. Press "1" if you want to publish data from the default file or type something other to chosse cinsol mode\n')
+            if self.mode == '1':
+                self.mode = 'file'
+                self.txt = DEFAULT_FILE
+            else:
+                self.mode = 'console'
+                self.txt = None
         self.run()
 
-    def run(self):
+    def publish_from_console(self):
         while True:
             counter = input(
                 'Choose a type of publication:\n 1. To choose news type "1" and press Enter\n 2. To choose advertisement type "2" and press Enter\n 3. To choose RentOfDay type "3" and press Enter\n Type another symbol and press Enter to Exit\n')
@@ -122,6 +157,13 @@ class Writer:
                 print("You decide to finish publishing")
                 break
             publication.publish()
+
+    def run(self):
+        if self.mode == 'file':
+            from_file = DataFromFile(self.txt)
+            from_file.publish()
+        elif self.mode == 'console':
+            self.publish_from_console()
 
 if __name__ == "__main__":
     Writer()

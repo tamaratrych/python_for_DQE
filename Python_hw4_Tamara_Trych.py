@@ -66,7 +66,10 @@ def capitalize_text(any_string):
     for i in re.findall(r'[^\.]*?[\.!\?]\s*', any_string): # Patern: Start - any number of symbols except "." End - one of the symbol ".", "!" or "?" and any white spaces
         str_parts.append(i.capitalize()) # Make the first letter in capital case and others - small letters
 
-    new_str = ''.join(str_parts) # Join formated parts to one string
+    if len(str_parts) > 0:
+        new_str = ''.join(str_parts) # Join formated parts to one string
+    else:
+        new_str = (any_string)
 
     return new_str
 
@@ -114,35 +117,35 @@ def modificate_text(any_string, any_substring):
 
     return normalized_str
 
+if __name__ == "__main__":
+    # hw2 1. create a list of random number of dicts (from 2 to 10)
+    list_random_dicts = generate_list_random_dict()
+    for i in list_random_dicts:
+        print(i)
 
-# hw2 1. create a list of random number of dicts (from 2 to 10)
-list_random_dicts = generate_list_random_dict()
-for i in list_random_dicts:
-    print(i)
+    # hw2 2. get previously generated list of dicts and create one common dict
+    common_dict = combine_dicts_leave_max_value_for_same_key(list_random_dicts)
+    print(common_dict)
 
-# hw2 2. get previously generated list of dicts and create one common dict
-common_dict = combine_dicts_leave_max_value_for_same_key(list_random_dicts)
-print(common_dict)
+    # hw 3
+    my_text = """homEwork:
+      tHis iz your homeWork, copy these Text to variable.
+    
+    
+    
+      You NEED TO normalize it fROM letter CASEs point oF View... also, create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
+    
+    
+    
+      it iZ misspeLLing here. fix“iZ” with correct “is”, but ONLY when it Iz a mistAKE?
+    
+    
+    
+      last iz TO calculate nuMber OF Whitespace characteRS in this Tex! caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
 
-# hw 3
-my_text = """homEwork:
-  tHis iz your homeWork, copy these Text to variable.
+    phrase_for_index = 'add it to the END OF this Paragraph.'
+    my_normalized_text = modificate_text(my_text, phrase_for_index)
+    print(my_normalized_text)
 
-
-
-  You NEED TO normalize it fROM letter CASEs point oF View... also, create one MORE senTENCE witH LAST WoRDS of each existING SENtence and add it to the END OF this Paragraph.
-
-
-
-  it iZ misspeLLing here. fix“iZ” with correct “is”, but ONLY when it Iz a mistAKE?
-
-
-
-  last iz TO calculate nuMber OF Whitespace characteRS in this Tex! caREFULL, not only Spaces, but ALL whitespaces. I got 87."""
-
-phrase_for_index = 'add it to the END OF this Paragraph.'
-my_normalized_text = modificate_text(my_text, phrase_for_index)
-print(my_normalized_text)
-
-space_num = count_spaces(my_normalized_text)
-print('\nNumber of whitespace characters in this text -', space_num)
+    space_num = count_spaces(my_normalized_text)
+    print('\nNumber of whitespace characters in this text -', space_num)
