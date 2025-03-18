@@ -26,7 +26,7 @@ class Publication:
 
     def publish(self):
         try:
-            with open("publication.txt", "a", encoding="utf-8") as f:
+            with open("../publication.txt", "a", encoding="utf-8") as f:
                 f.write(self.title + '\n')
                 f.write(self.pulication_text + '\n')
                 f.write(self.spesial_info + '\n\n')

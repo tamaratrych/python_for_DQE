@@ -8,9 +8,9 @@ Expand previous Homework 5 with additional class, which allow to provide records
 import os
 import sys
 from datetime import datetime, date
-from Python_hw4_Tamara_Trych import capitalize_text
+from HW.Python_hw4_Tamara_Trych import capitalize_text
 
-DEFAULT_FILE = 'my_file.txt'
+DEFAULT_FILE = '../my_file.txt'
 
 class Publication:
     def __init__(self, pulication_text):
@@ -21,7 +21,7 @@ class Publication:
 
     def publish(self):
         try:
-            with open("publication.txt", "a", encoding="utf-8") as f:
+            with open("../publication.txt", "a", encoding="utf-8") as f:
                 f.write(self.title + '\n')
                 f.write(self.pulication_text + '\n')
                 f.write(self.spesial_info + '\n\n')
@@ -122,7 +122,7 @@ class DataFromFile():
 
     def publish(self):
         if self.txt_for_publish:
-            with open("publication.txt", "a", encoding="utf-8") as f:
+            with open("../publication.txt", "a", encoding="utf-8") as f:
                 f.write(self.txt_for_publish)
         else:
             print("No data to publish.")

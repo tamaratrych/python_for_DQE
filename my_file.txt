@@ -1,12 +1,14 @@
-News -------------------------
-Knowledge is power.
-Minsk,  07/08/2025 16:49.
+News_for_publish:
+Knowledge
+is power.
+City_for_publish:
+Minsk
+Private_Ad:
 
-Private Ad -------------------
 New chair for 40 BYR.
-Actual until 05/05/2025, 48 days left.
+Expiration_date: 05/05/2026
+Rent_of_the_day:
 
-Rent of the day --------------
-Rent the flat of 30 m2 in Grodno, Suhaya, 25 for 150 USD.
-best price.
+Square: 50 Address: Minsk, Lenins, 120 Price: 200
+
 
