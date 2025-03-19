@@ -1,12 +1,13 @@
 import os
 import re
+from pprint import pprint
 from datetime import datetime, date
-from Text_normalizer import capitalize_text
-from Basic_class_Publication import Publication
-import Data_from_consol
+from Modules.Text_normalizer import capitalize_text
+from Modules.Basic_class_Publication import Publication
+import Modules.Data_from_consol
 
-DEFAULT_FILE = '../my_file.txt'
-file_for_wrong_data = '../wrong_data.txt'
+DEFAULT_FILE = 'my_file.txt'
+file_for_wrong_data = 'wrong_data.txt'
 keywords_for_parse = {
     'News_for_publish:': ('Pulication_text:', 'City_for_publish:'),
     'Private_Ad:': ('Pulication_text:', 'Expiration_date:'),
@@ -47,27 +48,28 @@ class DataFromFile(Publication):
         self.wrong_data = [self.txt_from_file] if self.publications == [] else []
 
     def parse_publication(self, any_publication):
-        for k, v in any_publication[0]:
+        for k, v in any_publication.items():
             text_with_title = f"Pulication_text: {v}"
             keywards = keywords_for_parse[k]
             values = self.parse_txt(text_with_title, keywards) # We get a list with dicts
             value = {}
             for d in values:
                 value.update(d)
+            value['Pulication_text:'] = value['Pulication_text:'].strip()
             value['Pulication_text:'] = capitalize_text(value['Pulication_text:'])
             result = {k: value}
 
         return result
 
     def parse_date(self, any_date_as_string):
-        if '.' in any_date_as_string:
-            day, month, year = map(int, any_date_as_string.split('.'))
-        elif '/' in any_date_as_string:
-            day, month, year = map(int, any_date_as_string.split('/'))
-        else:
+        try:
+            if '.' in any_date_as_string:
+                day, month, year = map(int, any_date_as_string.split('.'))
+            elif '/' in any_date_as_string:
+                day, month, year = map(int, any_date_as_string.split('/'))
+            return date(year, month, day)
+        except:
             return None
-
-        return date(year, month, day)
 
     def delete_file(self):
         try:
@@ -79,10 +81,10 @@ class DataFromFile(Publication):
             print(f"An error occurred: {e}")
 
     def save_wrong_data_in_file(self):
-        add_new_line = [line + "\n" for line in self.wrong_data]
         try:
             with open(file_for_wrong_data, "a", encoding="utf-8") as f:
-                f.writelines(add_new_line)
+                for item in self.wrong_data:
+                    pprint(item, stream=f)
         except Exception as e:
             print(f"An error occurred: {e}")
             print(f"Wrong data can't be saved in {file_for_wrong_data}")

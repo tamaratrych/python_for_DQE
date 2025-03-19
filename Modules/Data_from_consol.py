@@ -1,5 +1,5 @@
 from datetime import date
-from Basic_class_Publication import Publication
+from Modules.Basic_class_Publication import Publication
 
 
 class News(Publication):
@@ -34,6 +34,7 @@ class Ad(Publication):
                 month = input('Second, the month (type a figure from 1 to 12)\n')
                 year = input('Finally, year (type four figures)\n')
                 expiration_date = date(int(year), int(month), int(day))
+                print('expiration_date: ', expiration_date, type(expiration_date))
                 expiration_date = Publication.validate_date(expiration_date)
                 print(f"Expiration date is set to: {expiration_date}")
                 return cls(text, expiration_date)

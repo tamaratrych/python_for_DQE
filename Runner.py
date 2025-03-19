@@ -16,7 +16,7 @@ class Writer:
             self.mode = 'file'
             self.txt = sys.argv[1]
         else:
-            self.mode = input('Choose a mode. Press "1" if you want to publish data from a file or type something other to chosse consol mode\n')
+            self.mode = input('Choose a mode. Press "1" if you want to publish data from a file or type something other to choose consol mode\n')
             if self.mode == '1':
                 self.mode = 'file'
                 self.txt = input('Choose a file. Press "1" if you want to publish data from the default file or type path to your file\n')
@@ -49,12 +49,16 @@ class Writer:
                 single_publication = publication.parse_publication(article)
                 title = list(single_publication.keys())[0]
                 if title in list(Data_from_file.keywords_for_parse.keys()):
+                    article = list(publication.parse_publication(article).values())[0]
                     if title == 'News_for_publish:':
                         Data_from_consol.News(article['Pulication_text:'], article['City_for_publish:']).publish()
                     elif title == 'Private_Ad:':
-                        expiration_date = publication.parse_date(article['Expiration_date:'])
+                        try:
+                            expiration_date = publication.parse_date(article['Expiration_date:'])
+                        except:
+                            expiration_date = None
                         if expiration_date == None or publication.validate_date(expiration_date) == None:
-                            self.wrong_data.append(article)
+                            publication.wrong_data.append({title: article})
                         else:
                             Data_from_consol.Ad(article['Pulication_text:'], expiration_date).publish()
                     elif title == 'Rent_of_the_day:':
@@ -63,13 +67,13 @@ class Writer:
                             price = int(article['Price:'])
                             Data_from_consol.RentOfDay(article['Address:'], price, square).publish()
                         except:
-                            self.wrong_data.append(article)
+                            publication.wrong_data.append({title: article})
                     else:
-                        self.wrong_data.append(article)
+                        publication.wrong_data.append({title: article})
                 else:
-                    self.wrong_data.append(article)
+                    publication.wrong_data.append({title: article})
 
-        if self.wrong_data == []:
+        if publication.wrong_data == []:
             publication.delete_file()
         else:
             publication.save_wrong_data_in_file()

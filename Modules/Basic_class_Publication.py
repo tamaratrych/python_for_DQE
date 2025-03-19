@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-file_for_publications = "../publication.txt"
+file_for_publications = "publication.txt"
 
 class Publication:
     def __init__(self, pulication_text):
@@ -20,11 +20,7 @@ class Publication:
 
     @classmethod
     def validate_date(cls, expiration_date):
-        try:
-            if expiration_date < date.today():
-                raise ValueError("The date should be set in the future.")
-                return expiration_date
-            else:
-                return None
-        except ValueError as e:
-            raise ValueError(f"Invalid date: {e}")
+        if expiration_date < date.today():
+            return None
+            raise ValueError("The date should be set in the future.")
+        return expiration_date
