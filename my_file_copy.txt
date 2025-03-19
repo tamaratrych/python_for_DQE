@@ -1,0 +1,14 @@
+News_for_publish:
+Knowledge
+is power.
+City_for_publish:
+Orsha
+Private_Ad:
+
+New chair for 40 BYR.
+Expiration_hdate: 05/05/2028
+Rent_of_the_day:
+
+Square: 50m Address: Minsk, Lenins, 120 Price: 200$
+
+

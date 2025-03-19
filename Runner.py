@@ -46,6 +46,7 @@ class Writer:
         publication = Data_from_file.DataFromFile(self.txt)
         if publication.publications != None:
             for article in publication.publications:
+                data_not_published = article
                 single_publication = publication.parse_publication(article)
                 title = list(single_publication.keys())[0]
                 if title in list(Data_from_file.keywords_for_parse.keys()):
@@ -58,7 +59,7 @@ class Writer:
                         except:
                             expiration_date = None
                         if expiration_date == None or publication.validate_date(expiration_date) == None:
-                            publication.wrong_data.append({title: article})
+                            publication.wrong_data.append(data_not_published)
                         else:
                             Data_from_consol.Ad(article['Pulication_text:'], expiration_date).publish()
                     elif title == 'Rent_of_the_day:':
@@ -67,11 +68,11 @@ class Writer:
                             price = int(article['Price:'])
                             Data_from_consol.RentOfDay(article['Address:'], price, square).publish()
                         except:
-                            publication.wrong_data.append({title: article})
+                            publication.wrong_data.append(data_not_published)
                     else:
-                        publication.wrong_data.append({title: article})
+                        publication.wrong_data.append(data_not_published)
                 else:
-                    publication.wrong_data.append({title: article})
+                    publication.wrong_data.append(data_not_published)
 
         if publication.wrong_data == []:
             publication.delete_file()

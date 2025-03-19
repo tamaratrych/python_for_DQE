@@ -1,0 +1,3 @@
+
+{'Private_Ad:': 'New chair for 40 BYR.\nExpiration_hdate: 05/05/2028'}
+{'Rent_of_the_day:': 'Square: 50m Address: Minsk, Lenins, 120 Price: 200$'}
