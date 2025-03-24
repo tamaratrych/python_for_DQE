@@ -1,6 +1,8 @@
 import sys
 from Modules import Data_from_consol
 from Modules import Data_from_file
+from Modules import Statistics
+from Modules import Basic_class_Publication
 
 
 class_publication = {
@@ -41,6 +43,8 @@ class Writer:
                 print("You decide to finish publishing")
                 break
             publication.publish()
+      #      all_publications = publication.read_publications()
+       #     Statistics.Prepare_csv(all_publications)
 
     def publish_from_file(self):
         publication = Data_from_file.DataFromFile(self.txt)
@@ -73,6 +77,8 @@ class Writer:
                         publication.wrong_data.append(data_not_published)
                 else:
                     publication.wrong_data.append(data_not_published)
+     #   all_publications = publication.read_publications()
+      #  Statistics.Prepare_csv(all_publications)
 
         if publication.wrong_data == []:
             publication.delete_file()
@@ -88,6 +94,8 @@ class Writer:
             self.publish_from_file()
         elif self.mode == 'console':
             self.publish_from_console()
+        all_publications = Basic_class_Publication.Publication.read_publications()
+        Statistics.Prepare_csv(all_publications)
 
 
 if __name__ == "__main__":

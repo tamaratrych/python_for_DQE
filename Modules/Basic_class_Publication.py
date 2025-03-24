@@ -2,6 +2,7 @@ from datetime import datetime, date
 
 file_for_publications = "publication.txt"
 
+
 class Publication:
     def __init__(self, pulication_text):
         self.pulication_text = pulication_text
@@ -24,3 +25,12 @@ class Publication:
             return None
             raise ValueError("The date should be set in the future.")
         return expiration_date
+
+    @classmethod
+    def read_publications(self):
+        try:
+            with open(file_for_publications, "r", encoding="utf-8") as f:
+                current_publications = f.read()
+                return current_publications
+        except Exception as e:
+            print(f"An error occurred: {e}")
