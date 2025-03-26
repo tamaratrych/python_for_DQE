@@ -1,0 +1,83 @@
+[
+{
+    "title": "News -------------------------",
+    "pulication_text": "There are 24 hours in a day",
+    "city": "Borisov",
+    "expiration_date": "01.01.0001",
+    "square": 0,
+    "address": "",
+    "price": 0
+},
+{
+    "title": "News -------------------------",
+    "pulication_text": "",
+    "city": "Zaslavl",
+    "expiration_date": "01.01.0001",
+    "square": 0,
+    "address": "",
+    "price": 0
+},
+{
+    "title": "Private Ad -------------------",
+    "pulication_text": "Massage",
+    "city": "",
+    "expiration_date": "21.11.2025",
+    "square": 0,
+    "address": "",
+    "price": 0
+},
+{
+    "title": "Rent of the day --------------",
+    "pulication_text": "",
+    "city": "",
+    "expiration_date": "01.01.0001",
+    "square": 80,
+    "address": "Vena, Big square, 115",
+    "price": 1000
+},
+{
+    "title": "News -------------------------",
+    "pulication_text": "Surveys in 36 countries find that Christianity and Buddhism have the biggest losses from ‘religious switching’",
+    "city": "Budapest",
+    "expiration_date": "01.01.0001",
+    "square": 0,
+    "address": "",
+    "price": 0
+},
+{
+    "title": "Private Ad -------------------",
+    "pulication_text": "Massage",
+    "city": "",
+    "expiration_date": "21.11.2025",
+    "square": 0,
+    "address": "",
+    "price": 0
+},
+{
+    "title": "Rent of the day --------------",
+    "pulication_text": "",
+    "city": "",
+    "expiration_date": "01.01.0001",
+    "square": 80,
+    "address": "Vena, Big square, 115",
+    "price": 1000
+},
+{
+    "title": "Rent of the month",
+    "pulication_text": "",
+    "city": "",
+    "expiration_date": "01.01.0001",
+    "square": 0,
+    "address": "",
+    "price": 0
+},
+{
+    "title": "Rent of the day --------------",
+    "pulication_text": "",
+    "city": "",
+    "expiration_date": "01.01.0001",
+    "square": 50,
+    "address": "",
+    "price": 300
+}
+]

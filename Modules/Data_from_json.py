@@ -4,8 +4,8 @@ from Modules.Data_from_file import DataFromFile
 from Modules.Basic_class_Publication import Publication
 import Modules.Data_from_consol
 
-DEFAULT_JSON_FILE = 'my_json_file.txt'
-file_for_wrong_json_data = 'wrong_json_data.txt'
+DEFAULT_JSON_FILE = 'my_json_file.json'
+file_for_wrong_json_data = 'wrong_json_data.json'
 
 json_template = {
     "title": "",
@@ -21,7 +21,7 @@ class DataFromJsonFile(DataFromFile):
         try:
             with open(self.txt, "r", encoding="utf-8") as f:
                 txt_from_file = json.load(f)
-                print(txt_from_file)
+     #           print(txt_from_file)
             return txt_from_file
         except FileNotFoundError:
             print(f"Error: File '{self.txt}' not found.")
@@ -41,6 +41,7 @@ class DataFromJsonFile(DataFromFile):
     def save_wrong_data_in_file(self):
         try:
             json.dump(self.wrong_data, open(file_for_wrong_json_data, "a", encoding="utf-8"))
+
         except Exception as e:
             print(f"An error occurred: {e}")
             print(f"Wrong data can't be saved in {file_for_wrong_json_data}")

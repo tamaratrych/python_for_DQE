@@ -17,7 +17,13 @@ class Writer:
     def __init__(self, txt=None):
         if len(sys.argv) > 1:
             self.mode = sys.argv[1]
-            self.txt = sys.argv[2]
+            if len(sys.argv) > 2:
+                self.txt = sys.argv[2]
+            else:
+                if self.mode == 'txt':
+                    self.txt = Data_from_file.DEFAULT_FILE
+                elif self.mode == 'json':
+                    self.txt = Data_from_json.DEFAULT_JSON_FILE
         else:
             self.mode = input('Choose a mode. Press "1" if you want to publish data from a txt file\nPress "2" if you want to publish data from a txt file \nor type something other to choose consol mode\n')
             if self.mode == '1':
@@ -77,8 +83,6 @@ class Writer:
                             Data_from_consol.RentOfDay(article['Address:'], price, square).publish()
                         except:
                             publication.wrong_data.append(data_not_published)
-                    else:
-                        publication.wrong_data.append(data_not_published)
                 else:
                     publication.wrong_data.append(data_not_published)
 
@@ -90,12 +94,9 @@ class Writer:
     def publish_from_json(self):
         publication = Data_from_json.DataFromJsonFile(self.txt)
         if publication.publications:
-            print('publication.publications: ', publication.publications)
             for article in publication.publications:
-                print('article: ', article)
                 data_not_published = article
                 if article['title'] == 'News -------------------------' and article['pulication_text'] != '' and article['city'] != '':
-                    print('News -------------------------', article['pulication_text'], article['city'])
                     Data_from_consol.News(article['pulication_text'], article['city']).publish()
                 elif article['title'] == 'Private Ad -------------------' and article['pulication_text'] != '':
                     try:
@@ -104,32 +105,20 @@ class Writer:
                         expiration_date = None
                     if expiration_date == None or publication.validate_date(expiration_date) == None:
                         publication.wrong_data.append(data_not_published)
-                        print('Private Ad -------------------------', data_not_published, 'publication.wrong_data: ', publication.wrong_data)
                     else:
                         Data_from_consol.Ad(article['pulication_text'], expiration_date).publish()
-                        print('Private Ad -------------------', article['pulication_text'], expiration_date)
                 elif article['title'] == 'Rent of the day --------------' and article['address'] != '':
                     try:
                         square = int(article['square'])
                         price = int(article['price'])
                         Data_from_consol.RentOfDay(article['address'], price, square).publish()
-                        print('Rent of the day --------------', article['address'], price, square)
                     except:
                         publication.wrong_data.append(data_not_published)
-                        print('Rent of the day -------------------------', data_not_published, 'publication.wrong_data: ',
-                              publication.wrong_data)
-                    else:
-                        publication.wrong_data.append(data_not_published)
-                        print('Rent of the day -------------------------', data_not_published, 'publication.wrong_data: ',
-                              publication.wrong_data)
                 else:
                     publication.wrong_data.append(data_not_published)
-                    print( data_not_published, 'publication.wrong_data: ',
-                          publication.wrong_data)
 
         if publication.wrong_data == []:
             publication.delete_file()
-            print('publication.wrong_data: ', publication.wrong_data)
         else:
             publication.save_wrong_data_in_file()
 
@@ -142,9 +131,6 @@ class Writer:
             self.publish_from_file()
         elif self.mode == 'json':
             from_file = Data_from_json.DataFromJsonFile(self.txt)
-            print(from_file)
-            print(from_file.txt)
-            print(from_file.publications)
             if from_file.publications == None:
                 print("There's nothing to publish. The program has been completed")
                 return None
