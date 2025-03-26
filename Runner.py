@@ -1,6 +1,7 @@
 import sys
 from Modules import Data_from_consol
 from Modules import Data_from_file
+from Modules import Data_from_json
 from Modules import Statistics
 from Modules import Basic_class_Publication
 
@@ -15,15 +16,20 @@ class_publication = {
 class Writer:
     def __init__(self, txt=None):
         if len(sys.argv) > 1:
-            self.mode = 'file'
-            self.txt = sys.argv[1]
+            self.mode = sys.argv[1]
+            self.txt = sys.argv[2]
         else:
-            self.mode = input('Choose a mode. Press "1" if you want to publish data from a file or type something other to choose consol mode\n')
+            self.mode = input('Choose a mode. Press "1" if you want to publish data from a txt file\nPress "2" if you want to publish data from a txt file \nor type something other to choose consol mode\n')
             if self.mode == '1':
-                self.mode = 'file'
-                self.txt = input('Choose a file. Press "1" if you want to publish data from the default file or type path to your file\n')
+                self.mode = 'txt'
+                self.txt = input('Choose a file. Press "1" if you want to publish data from the default txt file or type path to your file\n')
                 if self.txt == '1':
                     self.txt = Data_from_file.DEFAULT_FILE
+            elif self.mode == '2':
+                self.mode = 'json'
+                self.txt = input('Choose a file. Press "1" if you want to publish data from the default json file or type path to your file\n')
+                if self.txt == '1':
+                    self.txt = Data_from_json.DEFAULT_JSON_FILE
             else:
                 self.mode = 'console'
                 self.txt = None
@@ -43,8 +49,6 @@ class Writer:
                 print("You decide to finish publishing")
                 break
             publication.publish()
-      #      all_publications = publication.read_publications()
-       #     Statistics.Prepare_csv(all_publications)
 
     def publish_from_file(self):
         publication = Data_from_file.DataFromFile(self.txt)
@@ -77,21 +81,74 @@ class Writer:
                         publication.wrong_data.append(data_not_published)
                 else:
                     publication.wrong_data.append(data_not_published)
-     #   all_publications = publication.read_publications()
-      #  Statistics.Prepare_csv(all_publications)
 
         if publication.wrong_data == []:
             publication.delete_file()
         else:
             publication.save_wrong_data_in_file()
 
+    def publish_from_json(self):
+        publication = Data_from_json.DataFromJsonFile(self.txt)
+        if publication.publications:
+            print('publication.publications: ', publication.publications)
+            for article in publication.publications:
+                print('article: ', article)
+                data_not_published = article
+                if article['title'] == 'News -------------------------' and article['pulication_text'] != '' and article['city'] != '':
+                    print('News -------------------------', article['pulication_text'], article['city'])
+                    Data_from_consol.News(article['pulication_text'], article['city']).publish()
+                elif article['title'] == 'Private Ad -------------------' and article['pulication_text'] != '':
+                    try:
+                        expiration_date = publication.parse_date(article['expiration_date'])
+                    except:
+                        expiration_date = None
+                    if expiration_date == None or publication.validate_date(expiration_date) == None:
+                        publication.wrong_data.append(data_not_published)
+                        print('Private Ad -------------------------', data_not_published, 'publication.wrong_data: ', publication.wrong_data)
+                    else:
+                        Data_from_consol.Ad(article['pulication_text'], expiration_date).publish()
+                        print('Private Ad -------------------', article['pulication_text'], expiration_date)
+                elif article['title'] == 'Rent of the day --------------' and article['address'] != '':
+                    try:
+                        square = int(article['square'])
+                        price = int(article['price'])
+                        Data_from_consol.RentOfDay(article['address'], price, square).publish()
+                        print('Rent of the day --------------', article['address'], price, square)
+                    except:
+                        publication.wrong_data.append(data_not_published)
+                        print('Rent of the day -------------------------', data_not_published, 'publication.wrong_data: ',
+                              publication.wrong_data)
+                    else:
+                        publication.wrong_data.append(data_not_published)
+                        print('Rent of the day -------------------------', data_not_published, 'publication.wrong_data: ',
+                              publication.wrong_data)
+                else:
+                    publication.wrong_data.append(data_not_published)
+                    print( data_not_published, 'publication.wrong_data: ',
+                          publication.wrong_data)
+
+        if publication.wrong_data == []:
+            publication.delete_file()
+            print('publication.wrong_data: ', publication.wrong_data)
+        else:
+            publication.save_wrong_data_in_file()
+
     def run(self):
-        if self.mode == 'file':
+        if self.mode == 'txt':
             from_file = Data_from_file.DataFromFile(self.txt)
             if from_file.txt_from_file == None:
                 print("There's nothing to publish. The program has been completed")
                 return None
             self.publish_from_file()
+        elif self.mode == 'json':
+            from_file = Data_from_json.DataFromJsonFile(self.txt)
+            print(from_file)
+            print(from_file.txt)
+            print(from_file.publications)
+            if from_file.publications == None:
+                print("There's nothing to publish. The program has been completed")
+                return None
+            self.publish_from_json()
         elif self.mode == 'console':
             self.publish_from_console()
         all_publications = Basic_class_Publication.Publication.read_publications()
