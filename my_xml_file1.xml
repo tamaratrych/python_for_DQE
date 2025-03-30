@@ -1,0 +1,56 @@
+<publications>
+    <publication>
+        <title>News</title>
+        <pulication_text>There are 60 sec in a hour</pulication_text>
+        <city>Vologda</city>
+        <expiration_date></expiration_date>
+        <square>0</square>
+        <address></address>
+        <price>0</price>
+    </publication>
+    <publication>
+        <title>News</title>
+        <pulication_text></pulication_text>
+        <city>Vologda</city>
+        <expiration_date></expiration_date>
+        <square>0</square>
+        <address></address>
+        <price>0</price>
+    </publication>
+    <publication>
+        <title>Private Ad</title>
+        <pulication_text>English lessons</pulication_text>
+        <city></city>
+        <expiration_date>20.12.2025</expiration_date>
+        <square>0</square>
+        <address></address>
+        <price>0</price>
+    </publication>
+    <publication>
+        <title>Rent of the day</title>
+        <pulication_text></pulication_text>
+        <city></city>
+        <expiration_date>01.01.0001</expiration_date>
+        <square>180</square>
+        <address>London, Trafalgar square, 15</address>
+        <price>1500</price>
+    </publication>
+    <publication>
+        <title>Rent</title>
+        <pulication_text></pulication_text>
+        <city></city>
+        <expiration_date>01.01.0001</expiration_date>
+        <square>180</square>
+        <address>London, Trafalgar square, 15</address>
+        <price>1500</price>
+    </publication>
+    <publication>
+        <title>News</title>
+        <pulication_text>There are 60 sec in a hour</pulication_text>
+        <city>Batumi</city>
+        <expiration_date></expiration_date>
+        <square>0</square>
+        <address></address>
+        <price>0</price>
+    </publication>
+</publications>

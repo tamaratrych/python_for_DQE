@@ -1,9 +1,12 @@
 import sys
+import xml.etree.ElementTree as ET
 from Modules import Data_from_consol
 from Modules import Data_from_file
 from Modules import Data_from_json
+from Modules import Data_from_xml
 from Modules import Statistics
 from Modules import Basic_class_Publication
+
 
 
 class_publication = {
@@ -24,8 +27,10 @@ class Writer:
                     self.txt = Data_from_file.DEFAULT_FILE
                 elif self.mode == 'json':
                     self.txt = Data_from_json.DEFAULT_JSON_FILE
+                elif self.mode == 'xml':
+                    self.txt = Data_from_xml.DEFAULT_XML_FILE
         else:
-            self.mode = input('Choose a mode. Press "1" if you want to publish data from a txt file\nPress "2" if you want to publish data from a txt file \nor type something other to choose consol mode\n')
+            self.mode = input('Choose a mode. Press "1" if you want to publish data from a txt file\nPress "2" if you want to publish data from a json file\nPress "3" if you want to publish data from a xml file  \nor type something other to choose consol mode\n')
             if self.mode == '1':
                 self.mode = 'txt'
                 self.txt = input('Choose a file. Press "1" if you want to publish data from the default txt file or type path to your file\n')
@@ -36,6 +41,11 @@ class Writer:
                 self.txt = input('Choose a file. Press "1" if you want to publish data from the default json file or type path to your file\n')
                 if self.txt == '1':
                     self.txt = Data_from_json.DEFAULT_JSON_FILE
+            elif self.mode == '3':
+                self.mode = 'xml'
+                self.txt = input('Choose a file. Press "1" if you want to publish data from the default xml file or type path to your file\n')
+                if self.txt == '1':
+                    self.txt = Data_from_xml.DEFAULT_XML_FILE
             else:
                 self.mode = 'console'
                 self.txt = None
@@ -85,11 +95,12 @@ class Writer:
                             publication.wrong_data.append(data_not_published)
                 else:
                     publication.wrong_data.append(data_not_published)
-
+            print(f'Data from {self.txt} is published to the {Basic_class_Publication.file_for_publications}')
         if publication.wrong_data == []:
             publication.delete_file()
         else:
             publication.save_wrong_data_in_file()
+            print(f'Wrong data is saved in the {Data_from_file.file_for_wrong_data}')
 
     def publish_from_json(self):
         publication = Data_from_json.DataFromJsonFile(self.txt)
@@ -116,11 +127,55 @@ class Writer:
                         publication.wrong_data.append(data_not_published)
                 else:
                     publication.wrong_data.append(data_not_published)
-
+            print(f'Data from {self.txt} is published to the {Basic_class_Publication.file_for_publications}')
         if publication.wrong_data == []:
             publication.delete_file()
         else:
             publication.save_wrong_data_in_file()
+            print(f'Wrong data is saved in the {Data_from_json.file_for_wrong_json_data}')
+
+    def publish_from_xml(self):
+        publication = Data_from_xml.DataFromXmlFile(self.txt)
+        if publication.publications:
+            publication_cnt = 0
+            wrong_publication_cnt = 0
+            wrong_tree = ET.parse(Data_from_xml.file_for_wrong_xml_data)
+            wrong_root = wrong_tree.getroot()
+            for article in publication.publications.findall("publication"):
+                publication.parse_publication(article)
+                if publication.title == 'News' and publication.pulication_text != '' and publication.city != '':
+                    Data_from_consol.News(publication.pulication_text, publication.city).publish()
+                    publication_cnt += 1
+                elif publication.title == 'Private Ad' and publication.pulication_text != '':
+                    try:
+                        expiration_date = publication.parse_date(publication.expiration_date)
+                    except:
+                        expiration_date = ''
+                    if expiration_date == '' or publication.validate_date(expiration_date) == None:
+                        wrong_root.append(article)
+                        wrong_publication_cnt += 1
+                    else:
+                        Data_from_consol.Ad(publication.pulication_text, expiration_date).publish()
+                        publication_cnt += 1
+                elif publication.title == 'Rent of the day' and publication.address != '':
+                    try:
+                        square = int(publication.square)
+                        price = int(publication.price)
+                        Data_from_consol.RentOfDay(publication.address, price, square).publish()
+                        publication_cnt += 1
+                    except:
+                        wrong_root.append(article)
+                        wrong_publication_cnt += 1
+                else:
+                    wrong_root.append(article)
+                    wrong_publication_cnt += 1
+            if publication_cnt > 0:
+                print(f'Data from {self.txt} is published to the {Basic_class_Publication.file_for_publications}')
+        if wrong_publication_cnt> 0:
+            wrong_tree.write(Data_from_xml.file_for_wrong_xml_data, encoding="utf-8", xml_declaration=True)
+            print(f'Wrong data is saved in the {Data_from_json.file_for_wrong_json_data}')
+        if publication_cnt > 0 and wrong_publication_cnt == 0:
+            publication.delete_file()
 
     def run(self):
         if self.mode == 'txt':
@@ -135,6 +190,12 @@ class Writer:
                 print("There's nothing to publish. The program has been completed")
                 return None
             self.publish_from_json()
+        elif self.mode == 'xml':
+            from_file = Data_from_xml.DataFromXmlFile(self.txt)
+            if from_file.publications == None:
+                print("There's nothing to publish. The program has been completed")
+                return None
+            self.publish_from_xml()
         elif self.mode == 'console':
             self.publish_from_console()
         all_publications = Basic_class_Publication.Publication.read_publications()
