@@ -6,6 +6,7 @@ from Modules import Data_from_json
 from Modules import Data_from_xml
 from Modules import Statistics
 from Modules import Basic_class_Publication
+from Modules import DB_Client
 
 
 
@@ -51,7 +52,17 @@ class Writer:
                 self.txt = None
         self.run()
 
+    def save_in_db(self, publication):
+        db = DB_Client.DBConnection()
+        db.create_table(publication.table_name)
+        db.insert(publication.table_name, publication.condition, publication.values)
+        db.connection.close()
+
+
     def publish_from_console(self):
+        table_name = ''
+        condition = ''
+        values = ''
         while True:
             counter = input(
                 'Choose a type of publication:\n 1. To choose news type "1" and press Enter\n 2. To choose advertisement type "2" and press Enter\n 3. To choose RentOfDay type "3" and press Enter\n Type another symbol and press Enter to Exit\n')
@@ -65,6 +76,7 @@ class Writer:
                 print("You decide to finish publishing")
                 break
             publication.publish()
+            self.save_in_db(publication)
 
     def publish_from_file(self):
         publication = Data_from_file.DataFromFile(self.txt)
@@ -76,7 +88,9 @@ class Writer:
                 if title in list(Data_from_file.keywords_for_parse.keys()):
                     article = list(publication.parse_publication(article).values())[0]
                     if title == 'News_for_publish:':
-                        Data_from_consol.News(article['Pulication_text:'], article['City_for_publish:']).publish()
+                        this_publication = Data_from_consol.News(article['Pulication_text:'], article['City_for_publish:'])
+                        this_publication.publish()
+                        self.save_in_db(this_publication)
                     elif title == 'Private_Ad:':
                         try:
                             expiration_date = publication.parse_date(article['Expiration_date:'])
@@ -85,12 +99,16 @@ class Writer:
                         if expiration_date == None or publication.validate_date(expiration_date) == None:
                             publication.wrong_data.append(data_not_published)
                         else:
-                            Data_from_consol.Ad(article['Pulication_text:'], expiration_date).publish()
+                            this_publication = Data_from_consol.Ad(article['Pulication_text:'], expiration_date)
+                            this_publication.publish()
+                            self.save_in_db(this_publication)
                     elif title == 'Rent_of_the_day:':
                         try:
                             square = int(article['Square:'])
                             price = int(article['Price:'])
-                            Data_from_consol.RentOfDay(article['Address:'], price, square).publish()
+                            this_publication = Data_from_consol.RentOfDay(article['Address:'], price, square)
+                            this_publication.publish()
+                            self.save_in_db(this_publication)
                         except:
                             publication.wrong_data.append(data_not_published)
                 else:
@@ -108,7 +126,9 @@ class Writer:
             for article in publication.publications:
                 data_not_published = article
                 if article['title'] == 'News -------------------------' and article['pulication_text'] != '' and article['city'] != '':
-                    Data_from_consol.News(article['pulication_text'], article['city']).publish()
+                    this_publication = Data_from_consol.News(article['pulication_text'], article['city'])
+                    this_publication.publish()
+                    self.save_in_db(this_publication)
                 elif article['title'] == 'Private Ad -------------------' and article['pulication_text'] != '':
                     try:
                         expiration_date = publication.parse_date(article['expiration_date'])
@@ -117,12 +137,16 @@ class Writer:
                     if expiration_date == None or publication.validate_date(expiration_date) == None:
                         publication.wrong_data.append(data_not_published)
                     else:
-                        Data_from_consol.Ad(article['pulication_text'], expiration_date).publish()
+                        this_publication = Data_from_consol.Ad(article['pulication_text'], expiration_date)
+                        this_publication.publish()
+                        self.save_in_db(this_publication)
                 elif article['title'] == 'Rent of the day --------------' and article['address'] != '':
                     try:
                         square = int(article['square'])
                         price = int(article['price'])
-                        Data_from_consol.RentOfDay(article['address'], price, square).publish()
+                        this_publication = Data_from_consol.RentOfDay(article['address'], price, square)
+                        this_publication.publish()
+                        self.save_in_db(this_publication)
                     except:
                         publication.wrong_data.append(data_not_published)
                 else:
@@ -144,7 +168,9 @@ class Writer:
             for article in publication.publications.findall("publication"):
                 publication.parse_publication(article)
                 if publication.title == 'News' and publication.pulication_text != '' and publication.city != '':
-                    Data_from_consol.News(publication.pulication_text, publication.city).publish()
+                    this_publication = Data_from_consol.News(publication.pulication_text, publication.city)
+                    this_publication.publish()
+                    self.save_in_db(this_publication)
                     publication_cnt += 1
                 elif publication.title == 'Private Ad' and publication.pulication_text != '':
                     try:
@@ -155,13 +181,17 @@ class Writer:
                         wrong_root.append(article)
                         wrong_publication_cnt += 1
                     else:
-                        Data_from_consol.Ad(publication.pulication_text, expiration_date).publish()
+                        this_publication = Data_from_consol.Ad(publication.pulication_text, expiration_date)
+                        this_publication.publish()
+                        self.save_in_db(this_publication)
                         publication_cnt += 1
                 elif publication.title == 'Rent of the day' and publication.address != '':
                     try:
                         square = int(publication.square)
                         price = int(publication.price)
-                        Data_from_consol.RentOfDay(publication.address, price, square).publish()
+                        this_publication = Data_from_consol.RentOfDay(publication.address, price, square)
+                        this_publication.publish()
+                        self.save_in_db(this_publication)
                         publication_cnt += 1
                     except:
                         wrong_root.append(article)
@@ -173,7 +203,7 @@ class Writer:
                 print(f'Data from {self.txt} is published to the {Basic_class_Publication.file_for_publications}')
         if wrong_publication_cnt> 0:
             wrong_tree.write(Data_from_xml.file_for_wrong_xml_data, encoding="utf-8", xml_declaration=True)
-            print(f'Wrong data is saved in the {Data_from_json.file_for_wrong_json_data}')
+            print(f'Wrong data is saved in the {Data_from_xml.file_for_wrong_xml_data}')
         if publication_cnt > 0 and wrong_publication_cnt == 0:
             publication.delete_file()
 

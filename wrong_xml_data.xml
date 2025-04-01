@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<wrong_publications><publication>
+        <title>News</title>
+        <pulication_text />
+        <city>Vologda</city>
+        <expiration_date />
+        <square>0</square>
+        <address />
+        <price>0</price>
+    </publication>
+    <publication>
+        <title>Rent</title>
+        <pulication_text />
+        <city />
+        <expiration_date>01.01.0001</expiration_date>
+        <square>180</square>
+        <address>London, Trafalgar square, 15</address>
+        <price>1500</price>
+    </publication>
+    <publication>
+        <title>News</title>
+        <pulication_text />
+        <city>Vologda</city>
+        <expiration_date />
+        <square>0</square>
+        <address />
+        <price>0</price>
+    </publication>
+    <publication>
+        <title>Rent</title>
+        <pulication_text />
+        <city />
+        <expiration_date>01.01.0001</expiration_date>
+        <square>180</square>
+        <address>London, Trafalgar square, 15</address>
+        <price>1500</price>
+    </publication>
+    <publication>
+        <title>News</title>
+        <pulication_text />
+        <city>Vologda</city>
+        <expiration_date />
+        <square>0</square>
+        <address />
+        <price>0</price>
+    </publication>
+    <publication>
+        <title>Rent</title>
+        <pulication_text />
+        <city />
+        <expiration_date>01.01.0001</expiration_date>
+        <square>180</square>
+        <address>London, Trafalgar square, 15</address>
+        <price>1500</price>
+    </publication>
+    </wrong_publications>

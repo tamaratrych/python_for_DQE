@@ -7,7 +7,11 @@ class News(Publication):
         super().__init__(pulication_text)
         self.publication_date_formated = self.publication_date.strftime("%m/%d/%Y %H:%M")
         self.title = "News -------------------------"
-        self.spesial_info = f"{publication_city},  {self.publication_date_formated}"
+        self.city = publication_city
+        self.spesial_info = f"{self.city},  {self.publication_date_formated}"
+        self.table_name = 'news'
+        self.condition = f"publication_text = '{self.pulication_text}' AND city = '{self.city}'"
+        self.values = f"'{self.title}', '{self.pulication_text}', '{self.city}', '{self.publication_date_formated}'"
 
     @classmethod
     def create_from_input(cls):
@@ -24,6 +28,9 @@ class Ad(Publication):
         self.days_left = self.expiration_date - self.publication_date.date()
         self.title = "Private Ad -------------------"
         self.spesial_info = f"Actual until {self.expiration_date_formated}, { self.days_left.days} days left"
+        self.table_name = 'ads'
+        self.condition = f"publication_text = '{self.pulication_text}' AND expiration_date = '{self.expiration_date_formated}'"
+        self.values = f"'{self.title}', '{self.pulication_text}', '{self.expiration_date_formated}'"
 
     @classmethod
     def create_from_input(cls):
@@ -44,9 +51,16 @@ class Ad(Publication):
 
 class RentOfDay(Publication):
     def __init__(self, address, price, square):
-        pulication_text = f"Rent the flat of {square} m2 in {address} for {price} USD"
+        self.address = address
+        self.price = price
+        self.square = square
+        pulication_text = f"Rent the flat of {self.square} m2 in {self.address} for {self.price} USD"
         super().__init__(pulication_text)
         self.title = "Rent of the day --------------"
+        self.table_name = 'rent'
+        self.condition = f"address = '{self.address}' AND square = {self.square} AND price  = {self.price}"
+        self.values = f"'{self.title}', '{self.address}', {self.square}, {self.price}"
+
         self.spesial_info = 'best price' if int(price) < 500 else 'best condition'
 
     @classmethod
